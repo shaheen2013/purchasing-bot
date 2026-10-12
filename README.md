@@ -36,15 +36,16 @@ stop and ask a human than guess. A dry run is the default, so nothing is bought 
 ## How it works
 
 ```mermaid
+%%{init: {'theme': 'neutral'}}%%
 flowchart LR
-    A[orders.csv] --> B[Validate and plan]
-    B --> C[Guards: price and stock]
-    C --> D[Build cart]
-    D --> E[Reconcile]
-    E -->|dry run| F[Stop before paying]
-    E -->|--live| G[Checkout]
-    G --> H[Confirm and record]
-    H --> I[Reports]
+    A["orders.csv"] --> B["Validate and plan"]
+    B --> C["Guards: price and stock"]
+    C --> D["Build cart"]
+    D --> E["Reconcile"]
+    E -->|"dry run"| F["Stop before paying"]
+    E -->|"live run"| G["Checkout"]
+    G --> H["Confirm and record"]
+    H --> I["Reports"]
 ```
 
 1. **Read and validate.** Each line of `orders.csv` is matched against the live catalog by id or title.

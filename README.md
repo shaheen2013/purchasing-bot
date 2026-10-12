@@ -15,6 +15,61 @@ clicked twice blindly.
 > Only fake card data is used. The bot refuses any card number that is not a well-known test number
 > such as `4111 1111 1111 1111`.
 
+## The problem it solves
+
+Buying many items in one go through a web shop is easy to automate badly. A simple script that loops over a
+list and clicks "Buy" breaks down in ways that cost money:
+
+- **Double orders.** The network drops or the page hangs right after "Purchase" is clicked. The script
+  cannot tell whether the order went through, retries, and the same goods are bought twice.
+- **Wrong carts.** A retry adds items that are already in the cart, or leftovers from an earlier attempt
+  get paid for along with the new order.
+- **Surprise prices.** A price goes up between planning and paying, and nobody notices until the invoice
+  arrives.
+- **Lost progress.** The script crashes halfway through a long list, and there is no record of what was
+  already bought, so someone has to check by hand or start over.
+- **No audit trail.** Afterwards nobody can say which line was bought, skipped or failed, and why.
+
+This bot treats every purchase as something that must be planned, checked and recorded. It would rather
+stop and ask a human than guess. A dry run is the default, so nothing is bought unless `--live` is given.
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[orders.csv] --> B[Validate and plan]
+    B --> C[Guards: price and stock]
+    C --> D[Build cart]
+    D --> E[Reconcile]
+    E -->|dry run| F[Stop before paying]
+    E -->|--live| G[Checkout]
+    G --> H[Confirm and record]
+    H --> I[Reports]
+```
+
+1. **Read and validate.** Each line of `orders.csv` is matched against the live catalog by id or title.
+   Unknown products and bad quantities are rejected with a reason.
+2. **Check the guards.** The current price of each product is compared with the line's `max_unit_price`,
+   and the (simulated) stock is checked. Lines that fail are skipped, not bought.
+3. **Plan the batches.** The remaining lines are split into batches, one checkout each. Every unit gets its
+   own id, and the whole plan is written to the SQLite ledger before anything is added to the cart.
+4. **Build the cart safely.** The bot first reads the cart, then adds only the units that are missing. Run
+   it twice and nothing is added twice.
+5. **Reconcile before paying.** The cart must contain exactly the planned units, and the total on the cart
+   page must equal the computed total. Anything unexpected is removed, and any mismatch stops the run.
+6. **Check out once.** The ledger records "checkout sent" before the Purchase button is clicked. If the
+   confirmation does not appear, the bot never clicks again blindly. It checks the cart: if the cart is
+   empty, the order went through; if everything is still there, it is safe to retry once.
+7. **Record and report.** The confirmation (order id, amount, last 4 digits of the card, name, date) is
+   saved with a screenshot. Every state change is timestamped, and each run ends with a CSV and an HTML
+   report.
+8. **Resume after a crash.** `--resume <run_id>` picks up from the ledger. Confirmed batches are never
+   repeated, and an unfinished cart is completed rather than rebuilt.
+
+The API does the fast, checkable work (catalog, prices, cart). The browser is used only for the checkout,
+because the store has no order API. A fully browser-driven mode (`--mode browser`) is available as a
+fallback.
+
 ## Setup (Windows)
 
 ```powershell

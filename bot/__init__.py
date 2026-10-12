@@ -1,1 +1,1 @@
-"""Bulk Purchasing Bot demo for https://www.demoblaze.com."""
+"""Bulk Purchasing Bot for https://www.demoblaze.com."""

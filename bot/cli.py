@@ -23,7 +23,7 @@ from .simulate import HELP as SIM_HELP, SimulationError, parse_simulations
 from .ui import ConsoleUI
 
 app = typer.Typer(add_completion=False, no_args_is_help=True,
-                  help="Bulk Purchasing Bot demo for the Demoblaze test store.")
+                  help="Bulk Purchasing Bot for the Demoblaze test store.")
 console = Console()
 RUNS_DIR = Path("runs")
 
@@ -70,7 +70,7 @@ def run(
     mode: Mode = typer.Option(Mode.api, "--mode", help="api = API-first, browser only for checkout; "
                                                        "browser = everything through the UI."),
     batch_size: int = typer.Option(0, "--batch-size", help="Order lines per checkout (0 = one checkout)."),
-    simulate: Optional[List[str]] = typer.Option(None, "--simulate", help="Demo switches:\n" + SIM_HELP),
+    simulate: Optional[List[str]] = typer.Option(None, "--simulate", help="Simulation switches:\n" + SIM_HELP),
     stock: Optional[Path] = typer.Option(None, "--stock", help="Simulated stock file (default: stock.yaml if present)."),
     no_stock: bool = typer.Option(False, "--no-stock", help="Ignore stock.yaml."),
     allow_partial: bool = typer.Option(False, "--allow-partial", help="Buy what is left when stock is short."),

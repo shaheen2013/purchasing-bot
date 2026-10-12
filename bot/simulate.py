@@ -1,4 +1,4 @@
-"""`--simulate` demo switches. None of these exist on Demoblaze itself."""
+"""`--simulate` switches. None of these exist on Demoblaze itself."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field

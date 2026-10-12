@@ -12,7 +12,7 @@ API_BASE = "https://api.demoblaze.com"
 WEB_BASE = "https://www.demoblaze.com"
 
 # Well-known public test card numbers. Anything else is refused, so a real card
-# can never end up in this demo by accident.
+# can never end up here by accident.
 TEST_CARDS = {
     "4111111111111111",
     "4242424242424242",
@@ -72,7 +72,7 @@ def load_settings(env_file: str | Path = ".env", require_credentials: bool = Tru
         )
     card = check_test_card(os.getenv("CARD_NUMBER", "4111 1111 1111 1111"))
     details = CheckoutDetails(
-        name=os.getenv("CARD_NAME", "Demo Buyer"),
+        name=os.getenv("CARD_NAME", "Test Buyer"),
         country=os.getenv("CARD_COUNTRY", "Testland"),
         city=os.getenv("CARD_CITY", "Sample City"),
         card=card,

@@ -5,9 +5,9 @@
   </picture>
 </p>
 
-# Bulk Purchasing Bot (Demoblaze demo)
+# Bulk Purchasing Bot
 
-A demo of **safe, reliable bulk purchasing** against [demoblaze.com](https://www.demoblaze.com), a public
+**Safe, reliable bulk purchasing** against [demoblaze.com](https://www.demoblaze.com), a public
 test store made for automation practice. The aim is correctness, not speed. Every order line goes through a
 recorded state machine. The cart is built idempotently and reconciled before paying. "Purchase" is never
 clicked twice blindly.
@@ -44,7 +44,7 @@ python -m bot report <run_id>                     # regenerate the reports
 | `--live` | Actually click Purchase. **Without it every run is a dry run.** |
 | `--mode api\|browser` | `api` (default): catalog, login, add-to-cart and cart checks go through the API, and the browser is used only for checkout. `browser`: the whole flow through the UI (the fallback). |
 | `--batch-size N` | N order lines per checkout. Each batch gets its own cart and confirmation. `0` = one checkout. |
-| `--simulate ...` | Demo switches (repeatable or comma separated): `price_drift=<prod_id>:<pct>`, `stock_out=<prod_id>`, `checkout_timeout=<batch_no>`, `interrupt=<batch_no>` |
+| `--simulate ...` | Simulation switches (repeatable or comma separated): `price_drift=<prod_id>:<pct>`, `stock_out=<prod_id>`, `checkout_timeout=<batch_no>`, `interrupt=<batch_no>` |
 | `--stock FILE` / `--no-stock` | Simulated inventory (default: `stock.yaml` if present) |
 | `--allow-partial` | Short stock -> buy what is left (`PARTIAL`) instead of `SKIP_STOCK` |
 | `--strict` | Unexpected items in the cart abort the run instead of being removed |
@@ -69,7 +69,7 @@ In the sample file, `Iphone 6 32gb` costs 790 with a max of 700, so the price gu
 simulation. `Sony xperia z5` asks for 3 while `stock.yaml` has 2, so it is `SKIP_STOCK`, or `PARTIAL` with
 `--allow-partial`.
 
-## What the demo proves
+## What it proves
 
 1. **Bulk input.** `orders.csv` is validated against the live `/entries` catalog (paginated). Bad rows are
    recorded as `SKIPPED / REJECTED` with the reason.
@@ -83,7 +83,7 @@ simulation. `Sony xperia z5` asks for 3 while `stock.yaml` has 2, so it is `SKIP
    to pass the guard is still caught by step 6: the computed total no longer matches the cart page, so the
    run aborts before paying.
 4. **Stock guard (SIMULATED).** Demoblaze has no inventory, so `stock.yaml` and
-   `--simulate stock_out=<id>` are a demo layer that exists only in this bot. Lines become `BUY`,
+   `--simulate stock_out=<id>` are a simulation layer that exists only in this bot. Lines become `BUY`,
    `PARTIAL` (with `--allow-partial`) or `SKIP_STOCK`.
 5. **Idempotent cart building.** The planner generates one uuid per unit (qty 5 means 5 `/addtocart`
    calls) and stores them in the ledger before anything is added. Each build reads `/viewcart` first and

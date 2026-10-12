@@ -10,7 +10,7 @@ from bot.simulate import parse_simulations
 
 from .fakes import FakeCheckout, FakeDemoblaze
 
-DETAILS = CheckoutDetails("Demo Buyer", "Testland", "Sample City", "4111111111111111", "12", "2030")
+DETAILS = CheckoutDetails("Test Buyer", "Testland", "Sample City", "4111111111111111", "12", "2030")
 
 
 @pytest.fixture

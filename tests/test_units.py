@@ -12,8 +12,8 @@ from .fakes import FakeDemoblaze
 
 def test_parse_confirmation_masks_card_and_fixes_month():
     c = parse_confirmation("Id: 4821733\nAmount: 1590 USD\nCard Number: 4111 1111 1111 1111\n"
-                           "Name: Demo Buyer\nDate: 12/9/2026")
-    assert (c.order_id, c.amount, c.card_last4, c.name) == ("4821733", 1590, "1111", "Demo Buyer")
+                           "Name: Test Buyer\nDate: 12/9/2026")
+    assert (c.order_id, c.amount, c.card_last4, c.name) == ("4821733", 1590, "1111", "Test Buyer")
     assert c.date_iso == "2026-10-12"  # cart.js uses 0-based getMonth()
     assert "4111 1111 1111 1111" not in c.text_masked and "**** **** **** 1111" in c.text_masked
 

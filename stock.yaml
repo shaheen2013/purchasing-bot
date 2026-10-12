@@ -1,5 +1,5 @@
 # SIMULATED inventory layer. Demoblaze has no stock at all; this file only exists to
-# demonstrate the stock guard. Format: prod_id: units available.
+# show the stock guard. Format: prod_id: units available.
 # Products that are not listed are treated as unlimited.
 1: 50     # Samsung galaxy s6
 3: 10     # Nexus 6

@@ -1,0 +1,6 @@
+.env
+ledger.db
+runs/
+__pycache__/
+.pytest_cache/
+.venv/
